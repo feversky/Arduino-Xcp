@@ -145,19 +145,31 @@ unsigned char TransmitSlipByte(unsigned char b)
 // Called by the XCP driver
 void ApplXcpSend(unsigned char len, const unsigned char * pMsg) 
 {
-    unsigned char b, checksum;
+    unsigned char b, checksum, i, len1;
+    const unsigned char * pData = pMsg;
     if (len==0||len>kXcpMaxDTO) return; // should not happen
     if (!Serial.write(SLIP_SYNC)) return; // Each packet begins with SYNC
-    if (!TransmitSlipByte(len)) return;
 
-    checksum = len;
+    len1 = len;
+    for (i = 0; i < len; i++)
+    {
+        b = *pData++;
+        if (b == SLIP_SYNC || b == SLIP_ESC)
+        {
+            len1++;
+        }
+    }
+
+    if (!Serial.write(len1)) return;
+
+    checksum = len1;
     while (len--) 
     {
         b = *pMsg++;
         checksum += b;
         if (!TransmitSlipByte(b)) return;   
     }
-    if (!TransmitSlipByte(checksum)) return;   
+    if (!Serial.write(checksum)) return;   
 
     return;       
 }
