@@ -49,7 +49,7 @@ extern "C" {
 #define XCP_DISABLE_GET_XCP_DATA_POINTER
 #define XCP_DISABLE_OPENCMDIF
 
-#define XCP_CPUTYPE_BIGENDIAN
+#define XCP_CPUTYPE_LITTLEENDIAN
 
 /* EEPROM access */
 #define XCP_DISABLE_READ_EEPROM
@@ -89,11 +89,11 @@ extern "C" {
 #define XCP_DISABLE_DAQ_HDR_ODT_DAQ
 #define XCP_DISABLE_DAQ_RESUME
 #define XCP_ENABLE_DAQ_PROCESSOR_INFO
-#define XCP_DISABLE_DAQ_RESOLUTION_INFO
+#define XCP_ENABLE_DAQ_RESOLUTION_INFO
 #define XCP_SEND_QUEUE_SAMPLE_ODT
 
 /* Events */
-#define XCP_DISABLE_DAQ_EVENT_INFO
+#define XCP_ENABLE_DAQ_EVENT_INFO
 
 /* DAQ Timestamp */
 #define XCP_DISABLE_DAQ_TIMESTAMP
@@ -143,6 +143,14 @@ extern "C" {
 #define kXcpMaxCTO     14      /* Maximum CTO Message Length */
 #define kXcpMaxDTO     14      /* Maximum DTO Message Length */
 
+#ifdef XCP_ENABLE_DAQ_EVENT_INFO
+#define kXcpMaxEvent 2
+extern vuint8 kXcpEventDirection[kXcpMaxEvent];
+extern vuint8 kXcpEventNameLength[kXcpMaxEvent];
+extern vuint8 kXcpEventCycle[kXcpMaxEvent];
+extern vuint8 kXcpEventUnit[kXcpMaxEvent];
+extern vuint8* kXcpEventName[kXcpMaxEvent];
+#endif
 
 #ifdef __cplusplus
 }

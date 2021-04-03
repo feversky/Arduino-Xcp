@@ -10,10 +10,8 @@
 
 #include "XcpSxIMaster.h"
 
-#define XCP_EVENT_1MS            0 
-#define XCP_EVENT_2MS            1
-#define XCP_EVENT_10MS           2
-#define XCP_EVENT_100MS          3
+#define XCP_EVENT_10MS            0 
+#define XCP_EVENT_100MS           1
 
 XcpSxIMaster xcpMaster = XcpSxIMaster(115200);
 
@@ -62,13 +60,13 @@ void TaskBlink(void *pvParameters)  // This is a task.
   // initialize digital LED_BUILTIN on pin 13 as an output.
   pinMode(LED_BUILTIN, OUTPUT);
 
+  TickType_t xLastWakeTime = xTaskGetTickCount();
   for (;;) // A Task shall never return or exit.
   {
-
-    xcpMaster.Event(3);
+    vTaskDelayUntil(&xLastWakeTime, 100/portTICK_PERIOD_MS);
+    xcpMaster.Event(XCP_EVENT_100MS);
     digitalWrite(LED_BUILTIN, on ? HIGH: LOW);  
     on = !on;
-    vTaskDelay(100/portTICK_PERIOD_MS);
   }
 }
 
