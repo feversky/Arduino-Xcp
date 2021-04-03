@@ -5,8 +5,19 @@
 extern "C" {
 #endif
 
+/* 
+Bit
+7: CONSISTENCY_DAQ
+6: CONSISTENCY_EVENT
+5: x
+4: x
+3: STIM
+2: DAQ
+1: x
+0: x
+ */
 vuint8 kXcpEventDirection[kXcpMaxEvent] = {
-    1, 1 /* DIRECTION = DAQ */
+    0b00000100, 0b00000100
 };
 
 vuint8 kXcpEventNameLength[kXcpMaxEvent] = {

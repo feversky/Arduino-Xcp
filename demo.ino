@@ -14,6 +14,8 @@
 #define XCP_EVENT_100MS           1
 
 XcpSxIMaster xcpMaster = XcpSxIMaster(115200);
+unsigned char amplifier = 10;
+double sig = 0.0;
 
 // define two tasks for Blink & AnalogRead
 void TaskBlink( void *pvParameters );
@@ -48,6 +50,7 @@ void TaskBlink(void *pvParameters)  // This is a task.
 {
   (void) pvParameters;
   static bool on = true;
+  static unsigned char i = 0;
 
 /*
   Blink
@@ -64,6 +67,11 @@ void TaskBlink(void *pvParameters)  // This is a task.
   for (;;) // A Task shall never return or exit.
   {
     vTaskDelayUntil(&xLastWakeTime, 100/portTICK_PERIOD_MS);
+    sig = amplifier * sin(i*2*3.14159/100);
+    if (i++ == 100)
+    {
+      i = 0;
+    }
     xcpMaster.Event(XCP_EVENT_100MS);
     digitalWrite(LED_BUILTIN, on ? HIGH: LOW);  
     on = !on;
