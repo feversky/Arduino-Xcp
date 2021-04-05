@@ -166,7 +166,18 @@ void ApplXcpSend(unsigned char len, const unsigned char * pMsg)
     while (len--) 
     {
         b = *pMsg++;
-        checksum += b;
+        switch (b)
+        {
+        case SLIP_SYNC:
+            checksum += SLIP_ESC + ESC_SYNC;
+            break;
+        case SLIP_ESC:
+            checksum += SLIP_ESC + ESC_ESC;
+            break;
+        default:
+            checksum += b;
+            break;
+        }
         if (!TransmitSlipByte(b)) return;   
     }
     if (!Serial.write(checksum)) return;   

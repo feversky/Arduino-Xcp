@@ -67,8 +67,8 @@ void TaskBlink(void *pvParameters)  // This is a task.
   for (;;) // A Task shall never return or exit.
   {
     vTaskDelayUntil(&xLastWakeTime, 100/portTICK_PERIOD_MS);
-    sig = amplifier * sin(i*2*3.14159/100);
-    if (i++ == 100)
+    sig = amplifier * sin(i*2*3.14159/20);
+    if (++i == 20)
     {
       i = 0;
     }
